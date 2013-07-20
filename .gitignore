@@ -1,0 +1,8 @@
+*~
+_cache
+*.hi
+*.o
+_site
+/.vagrant/machines/default/virtualbox/id
+/site
+/package.box
