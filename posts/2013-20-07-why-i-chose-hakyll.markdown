@@ -18,7 +18,7 @@ site.  Also, you don't need to worry about server restarts.  I choose
 to use [Hakyll](http://jaspervdj.be/hakyll/) because I like to support
 the community.
 
-There are a few changes that I plan on making with my blog.
+There are a few changes I made from the traditional setup
 
 1. Remove the .html extension from all pages and let Nginx know that
    we mean to serve html pages.
@@ -27,4 +27,13 @@ By removing the .html extension we can futureproof our site and make
 the urls more uniform for my taste.  If in the future we want to
 change the blog to a more dynamic blog, we can do so without changing
 any of the links or paths on the site.
+
+For my local previewing of the blog, I compile the Hakyll program for
+my site.  I then run my site in preview mode which continually checks
+for changes.  Finally, I start a small node server that will render my
+pages even if their extension isn't set and it defaults to a text/html
+mimetype.  Without a file extension, static file serving leaves it up
+to your browser to decide.
+
+TODO: Make a small yesod file server that sets the mimetype.
 
