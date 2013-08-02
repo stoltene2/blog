@@ -6,3 +6,7 @@ _site
 /.vagrant/machines/default/virtualbox/id
 /site
 /package.box
+/TAGS
+/cabal-dev/
+/dist/
+/libpeerconnection.log
