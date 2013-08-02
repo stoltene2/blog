@@ -23,7 +23,7 @@ main = hakyll $ do
         compile compressCssCompiler
 
     match (fromList ["about.rst", "contact.markdown"]) $ do
-        route   $ setExtension "html"
+        route   $ setExtension ""
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
@@ -31,15 +31,15 @@ main = hakyll $ do
 --------------------------------------------------------------------------------
 -- Individual blog posts
     match "posts/*" $ do
-        route $ setExtension "html"
+        route $ setExtension ""
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
 -- TODO: what does this do?
             >>= relativizeUrls
 
-    create ["archive.html"] $ do
-        route idRoute
+    create ["archive"] $ do
+        route (setExtension "")
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
@@ -53,7 +53,7 @@ main = hakyll $ do
                 >>= relativizeUrls
 
     match "index.html" $ do
-        route idRoute
+        route $ setExtension ""
         compile $ do
             let indexCtx =
                     constField "title" "Home"                `mappend`
