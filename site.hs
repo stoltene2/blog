@@ -35,9 +35,11 @@ main = hakyll $ do
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
--- TODO: what does this do?
             >>= relativizeUrls
 
+--------------------------------------------------------------------------------
+-- Archive page
+        
     create ["archive"] $ do
         route (setExtension "")
         compile $ do
@@ -52,6 +54,8 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
+--------------------------------------------------------------------------------
+-- Index page            
     match "index.html" $ do
         route $ setExtension ""
         compile $ do

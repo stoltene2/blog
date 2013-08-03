@@ -1,32 +1,75 @@
 html,
 body {
-  height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
+    height: 100%;
+/* The html and body elements cannot have any padding or margin. */
 }
 
 /* Wrapper for page content to push down footer */
 #body_wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by its height */
-  margin: 0 auto -60px;
-  /* Pad bottom by footer height */
-  padding: 0 0 60px;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
 }
 
 /* Set the fixed height of the footer here */
 #footer {
-  height: 60px;
-  background-color: #f5f5f5;
+    height: 60px;
+    background-color: #f5f5f5;
 }
 
 /* Lastly, apply responsive CSS fixes as necessary */
 @media (max-width: 767px) {
-  #footer {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+    #footer {
+	margin-left: -20px;
+	margin-right: -20px;
+	padding-left: 20px;
+	padding-right: 20px;
+    }
+}
+
+h1 {
+    line-height: 1.1;
+}
+
+h2 {
+    line-height: 1.1;
+}
+
+h3 {
+    line-height: 1.1;
+}
+
+h4 {
+    line-height: 1.1;
+}
+
+h5 {
+    line-height: 1.1;
+}
+
+h6 {
+    line-height: 1.1;
+}
+
+
+/* Blog */
+.blog-body {
+    line-height: 1.4;
+    margin-bottom: 45px;
+    margin-top: 20px;
+    width: 480px;
+    text-align: justify;
+}
+
+.blog-body p {
+    margin-bottom: 0;
+}
+
+.blog-body p + p {
+    text-indent: 2em;
+    margin-top: 0;
 }
