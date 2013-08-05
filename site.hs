@@ -22,12 +22,6 @@ main = hakyll $ do
         route   idRoute
         compile compressCssCompiler
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
-        route   $ setExtension ""
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
-
 --------------------------------------------------------------------------------
 -- Individual blog posts
     match "posts/*" $ do
@@ -56,20 +50,19 @@ main = hakyll $ do
 
 --------------------------------------------------------------------------------
 -- Index page            
-    match "index.html" $ do
-        route $ setExtension ""
+    match "pages/home.html" $ do
+        route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ""
         compile $ do
-            let indexCtx =
+            let homeCtx =
                     constField "title" "Home"                `mappend`
                     defaultContext
 
             getResourceBody
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
+                >>= applyAsTemplate homeCtx
+                >>= loadAndApplyTemplate "templates/default.html" homeCtx
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
-
 
 --------------------------------------------------------------------------------
 

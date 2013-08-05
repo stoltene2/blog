@@ -57,19 +57,32 @@ h6 {
 
 
 /* Blog */
+.blog-title {
+    line-height: 1.1;
+    width: 512px;
+    font-family: Sans-Serif, serif;
+    color: #222;
+}
+
+.blog-info {
+    color: #888;
+    margin-left: 15px;
+    font-size: 14px;
+    font-style: italic;
+}
+
 .blog-body {
     line-height: 1.4;
     margin-bottom: 45px;
     margin-top: 20px;
-    width: 480px;
+    width: 512px;
     text-align: justify;
+    font-size: 16px;
+    font-family: 'Crimson Text', serif;
+    color: #444;
 }
 
-.blog-body p {
-    margin-bottom: 0;
+.blog-body .sourceCode {
+    width: 100%;
 }
 
-.blog-body p + p {
-    text-indent: 2em;
-    margin-top: 0;
-}
