@@ -10,3 +10,4 @@ _site
 /cabal-dev/
 /dist/
 /libpeerconnection.log
+/.cabal-sandbox/

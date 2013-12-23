@@ -41,6 +41,8 @@ main = hakyll $ do
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
+                    constField "blogLink" "active"           `mappend`
+                    constField "homeLink" ""                 `mappend`
                     defaultContext
 
             makeItem ""
@@ -54,8 +56,10 @@ main = hakyll $ do
         route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ""
         compile $ do
             let homeCtx =
-                    constField "title" "Home"                `mappend`
-                    defaultContext
+                  constField "title" "Home"                `mappend`
+                  constField "homeLink" "active"           `mappend`
+                  constField "blogLink" ""                 `mappend`
+                  defaultContext
 
             getResourceBody
                 >>= applyAsTemplate homeCtx
@@ -68,8 +72,10 @@ main = hakyll $ do
 
 postCtx :: Context String
 postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
+  dateField "date" "%B %e, %Y"   `mappend`
+  constField "blogLink" "active" `mappend`
+  constField "homeLink" ""       `mappend`
+  defaultContext
 
 --------------------------------------------------------------------------------
 

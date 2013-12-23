@@ -52,6 +52,6 @@ executable personal-blog
   -- other-modules:       
   
   -- Other library packages from which modules are imported.
-  build-depends:       base ==4.5.*
+  build-depends:       base >= 4.5
                      , hakyll >= 4.3.1.0 && <= 4.4.0.0
   
