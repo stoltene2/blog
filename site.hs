@@ -25,7 +25,7 @@ main = hakyll $ do
 --------------------------------------------------------------------------------
 -- Individual blog posts
     match "posts/*" $ do
-        route $ setExtension ""
+        route $ setExtension ".html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
@@ -35,7 +35,7 @@ main = hakyll $ do
 -- Archive page
         
     create ["archive"] $ do
-        route (setExtension "")
+        route (setExtension ".html")
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
@@ -53,7 +53,7 @@ main = hakyll $ do
 --------------------------------------------------------------------------------
 -- Index page            
     match "pages/home.html" $ do
-        route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ""
+        route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
         compile $ do
             let homeCtx =
                   constField "title" "Home"                `mappend`
