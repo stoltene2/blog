@@ -9,10 +9,9 @@ body {
     min-height: 100%;
     height: auto !important;
     height: 100%;
+    background-image: url('/images/p6.png');
     /* Negative indent footer by its height */
     margin: 0 auto -60px;
-    /* Pad bottom by footer height */
-    padding: 0 0 60px;
 }
 
 /* Set the fixed height of the footer here */
@@ -36,12 +35,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Blog */
+.blog-entry {
+    width: 580px;
+    background-color: white;
+    padding-top: 20px;
+    padding-left: 35px;    
+}
+
 .blog-title {
     line-height: 1.1;
-    width: 512px;
+    margin-left: -10px;
     font-family: Sans-Serif, serif;
     color: #222;
 }
+
 
 .blog-info {
     color: #888;
@@ -52,9 +59,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .blog-body {
     line-height: 1.4;
-    margin-bottom: 45px;
-    margin-top: 20px;
-    width: 512px;
+    padding-bottom: 45px;
+    padding-top: 20px;
+    width: 510px;
     text-align: justify;
     font-size: 16px;
     font-family: 'Crimson Text', serif;
@@ -65,3 +72,11 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
 }
 
+/* Navbar */
+.navbar {
+    background-image: url("/images/stripe.png");
+}
+
+.navbar .active{
+    background-image: url("/images/unselected.png");
+}
