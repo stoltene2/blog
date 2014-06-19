@@ -2,9 +2,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
+import           Control.Applicative
+import Control.Monad
+import           Data.Map (member)
+import Data.Typeable
+import Data.Binary
+import Data.Monoid
+import Data.Maybe
+
+import System.FilePath.Posix  (takeBaseName,takeDirectory,(</>),splitFileName)
 
 
---------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
 
@@ -27,9 +35,10 @@ main = hakyll $ do
     match "posts/*" $ do
         route $ setExtension ".html"
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
-            >>= relativizeUrls
+          >>= loadAndApplyTemplate "templates/post.html"    postCtx
+          >>= loadAndApplyTemplate "templates/default.html" postCtx
+          >>= relativizeUrls
+   
 
 --------------------------------------------------------------------------------
 -- Archive page
@@ -37,7 +46,7 @@ main = hakyll $ do
     create ["archive"] $ do
         route (setExtension ".html")
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
+            posts <- recentFirst =<< loadAllPublished "posts/*"
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
@@ -79,6 +88,11 @@ postCtx =
 
 --------------------------------------------------------------------------------
 
-publishedPosts :: [Item a] -> m [Item a]
-publishedPosts items = undefined
-               -- return $ filter (\item -> currentDate > metaData date item) items
+publishedCompiler :: Compiler (Item a)
+publishedCompiler = undefined
+
+
+loadAllPublished :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
+loadAllPublished p = filterM published =<< loadAll p
+  where
+    published i = isJust <$> getMetadataField (itemIdentifier i) "published"
