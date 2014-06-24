@@ -44,8 +44,8 @@ main = hakyll $ do
     match "posts/*" $ do
         route $ setExtension ".html"
         compile $ pandocCompiler
-          >>= loadAndApplyTemplate "templates/post.html"    postCtx
           >>= saveSnapshot "content"
+          >>= loadAndApplyTemplate "templates/post.html"    postCtx
           >>= loadAndApplyTemplate "templates/default.html" postCtx
           >>= relativizeUrls
    
@@ -91,26 +91,19 @@ main = hakyll $ do
 --------------------------------------------------------------------------------
 -- XML Feed generation
 
-    create ["atom.xml"] $ do
-        route idRoute
-        compile $ do
-            let feedCtx = postCtx `mappend` bodyField "description"
-
-            posts <- fmap (take 10) . recentFirst =<< loadAllPublishedSnapshots "posts/*"
-
-            renderAtom feedConfiguration feedCtx posts
-
+    create ["atom.xml"] (feedRule renderAtom)
+    create ["rss.xml"] (feedRule renderRss)
 
 
 ------------------------------------------------------------------------------
 
 postCtx :: Context String
 postCtx =
-  dateField "date" "%B %e, %Y"   `mappend`
-  constField "blogLink" "active" `mappend`
-  constField "homeLink" ""       `mappend`
-  defaultContext
-
+    dateField "date" "%B %e, %Y"   `mappend`
+    constField "blogLink" "active" `mappend`
+    constField "homeLink" ""       `mappend`
+    defaultContext
+  
 --------------------------------------------------------------------------------
 
 loadAllPublished :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
@@ -123,3 +116,11 @@ loadAllPublishedSnapshots :: (Typeable a, Binary a) => Pattern -> Compiler [Item
 loadAllPublishedSnapshots p = filterM published =<< loadAllSnapshots p "content"
   where
     published i = isJust <$> getMetadataField (itemIdentifier i) "published"
+
+
+feedRule f = do
+    route idRoute
+    compile $ do
+        let feedCtx = postCtx `mappend` teaserField "description" "content" `mappend` bodyField "description" 
+        posts <- fmap (take 10) . recentFirst =<< loadAllPublishedSnapshots "posts/*"
+        f feedConfiguration feedCtx posts

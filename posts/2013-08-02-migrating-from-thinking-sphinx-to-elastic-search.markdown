@@ -1,6 +1,7 @@
 ---
 title: From Thinking Sphinx to Elastic Search
 author: Eric Stolten
+published: true
 ---
 
 Sometimes systems change and we need to change with them.
@@ -11,6 +12,8 @@ small portions of our systems until the migrations are complete.  It
 feels like you spend more time on the planning stage than the
 execution.  But there is no greater feeling then when the migration is
 complete and you are left saying to yourself, "that was easy."
+
+<!--more-->
 
 If you've ever tried changing from Thinking Sphinx to Elastic Search
 incrementally, you might run into some problems.  Here, I present a
@@ -48,7 +51,7 @@ changed it once, why would you need to ever change it again, right?
 
 ~~~ {.ruby .numberLines}
 tire.search do
-##############################################################
+
 end
 ~~~
 	

@@ -12,6 +12,7 @@ experience hacking with Haskell.  Even without experience you can find
 a fair number of blogs that have their source code online for
 inspiration.
 
+
 Personally, I like many of the advantages of running a static blog site.
 Primarily, it is the least resource intensive option for serving a web
 site.  Also, you don't need to worry about server restarts.  I choose

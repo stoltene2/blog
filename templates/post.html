@@ -8,6 +8,10 @@
   </div>
 
   <div class="blog-body">
-    $body$
+    $if(teaser)$
+      $teaser$
+    $else$
+      $body$
+    $endif$
   </div>
 </div>
