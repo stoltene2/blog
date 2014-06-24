@@ -13,6 +13,15 @@ import Data.Maybe
 import System.FilePath.Posix  (takeBaseName,takeDirectory,(</>),splitFileName)
 
 
+feedConfiguration :: FeedConfiguration
+feedConfiguration =  FeedConfiguration
+    { feedTitle       = "Programming, Design, Architecture and Fun"
+    , feedDescription = "I explore program design, large scale applications, and solid design especially with FP."
+    , feedAuthorName  = "Eric Stolten"
+    , feedAuthorEmail = "eric@stolten.net"
+    , feedRoot        = "http://eric.stolten.net"
+    }
+
 main :: IO ()
 main = hakyll $ do
 
@@ -36,6 +45,7 @@ main = hakyll $ do
         route $ setExtension ".html"
         compile $ pandocCompiler
           >>= loadAndApplyTemplate "templates/post.html"    postCtx
+          >>= saveSnapshot "content"
           >>= loadAndApplyTemplate "templates/default.html" postCtx
           >>= relativizeUrls
    
@@ -77,7 +87,22 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
+
 --------------------------------------------------------------------------------
+-- XML Feed generation
+
+    create ["atom.xml"] $ do
+        route idRoute
+        compile $ do
+            let feedCtx = postCtx `mappend` bodyField "description"
+
+            posts <- fmap (take 10) . recentFirst =<< loadAllPublishedSnapshots "posts/*"
+
+            renderAtom feedConfiguration feedCtx posts
+
+
+
+------------------------------------------------------------------------------
 
 postCtx :: Context String
 postCtx =
@@ -88,11 +113,13 @@ postCtx =
 
 --------------------------------------------------------------------------------
 
-publishedCompiler :: Compiler (Item a)
-publishedCompiler = undefined
-
-
 loadAllPublished :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
 loadAllPublished p = filterM published =<< loadAll p
+  where
+    published i = isJust <$> getMetadataField (itemIdentifier i) "published"
+
+
+loadAllPublishedSnapshots :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
+loadAllPublishedSnapshots p = filterM published =<< loadAllSnapshots p "content"
   where
     published i = isJust <$> getMetadataField (itemIdentifier i) "published"
