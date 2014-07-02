@@ -15,7 +15,7 @@ import System.FilePath.Posix  (takeBaseName,takeDirectory,(</>),splitFileName)
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration =  FeedConfiguration
-    { feedTitle       = "Programming, Design, Architecture and Fun"
+    { feedTitle       = "Programming the smart way."
     , feedDescription = "I explore program design, large scale applications, and solid design especially with FP."
     , feedAuthorName  = "Eric Stolten"
     , feedAuthorEmail = "eric@stolten.net"
