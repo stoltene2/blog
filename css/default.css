@@ -9,7 +9,6 @@ body {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    background-image: url('/images/p6.png');
     /* Negative indent footer by its height */
     margin: 0 auto -60px;
 }
