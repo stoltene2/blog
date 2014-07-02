@@ -73,7 +73,20 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Navbar */
 .navbar {
-    background-image: url("/images/stripe.png");
+    background-color: #333333;
+}
+
+
+.navbar-brand {
+    color: #eee;
+}
+
+.navbar-brand:hover {
+    color: #eee;
+}
+
+.navbar-nav > li > a:hover {
+    color: #eee;
 }
 
 .navbar .active{
