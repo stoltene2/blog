@@ -1,7 +1,6 @@
 ---
 title: From Thinking Sphinx to Elastic Search
 author: Eric Stolten
-published: true
 ---
 
 Sometimes systems change and we need to change with them.

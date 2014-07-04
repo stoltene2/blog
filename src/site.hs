@@ -22,8 +22,15 @@ feedConfiguration =  FeedConfiguration
     , feedRoot        = "http://eric.stolten.net"
     }
 
+
+config :: Configuration
+config = defaultConfiguration
+    { deployCommand = "rsync --checksum -av \
+                      \_site/* stolten.net:/var/www/eric.stolten.net"
+    }
+
 main :: IO ()
-main = hakyll $ do
+main = hakyllWith config $ do
 
 --------------------------------------------------------------------------------
 -- Assets
@@ -48,11 +55,11 @@ main = hakyll $ do
           >>= loadAndApplyTemplate "templates/post.html"    postCtx
           >>= loadAndApplyTemplate "templates/default.html" postCtx
           >>= relativizeUrls
-   
+
 
 --------------------------------------------------------------------------------
 -- Archive page
-        
+
     create ["archive"] $ do
         route (setExtension ".html")
         compile $ do
@@ -62,7 +69,7 @@ main = hakyll $ do
                     constField "title" "Archives"            `mappend`
                     constField "blogLink" "active"           `mappend`
                     constField "homeLink" ""                 `mappend`
-                    constField "aboutLink" ""                `mappend`                    
+                    constField "aboutLink" ""                `mappend`
                     defaultContext
 
             makeItem ""
@@ -71,15 +78,15 @@ main = hakyll $ do
                 >>= relativizeUrls
 
 --------------------------------------------------------------------------------
--- Index page            
-    match "pages/home.html" $ do
+-- Index page
+    match "pages/index.html" $ do
         route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
         compile $ do
             let homeCtx =
                   constField "title" "Home"                `mappend`
                   constField "homeLink" "active"           `mappend`
                   constField "blogLink" ""                 `mappend`
-                  constField "aboutLink" ""                `mappend`                  
+                  constField "aboutLink" ""                `mappend`
                   defaultContext
 
             getResourceBody
@@ -98,7 +105,7 @@ main = hakyll $ do
                   constField "aboutLink" "active"           `mappend`
                   defaultContext
 
-            pandocCompiler 
+            pandocCompiler
                 >>= applyAsTemplate homeCtx
                 >>= loadAndApplyTemplate "templates/default.html" homeCtx
                 >>= relativizeUrls
@@ -120,9 +127,9 @@ postCtx =
     dateField "date" "%B %e, %Y"   `mappend`
     constField "blogLink" "active" `mappend`
     constField "homeLink" ""       `mappend`
-    constField "aboutLink" ""      `mappend`                        
+    constField "aboutLink" ""      `mappend`
     defaultContext
-  
+
 --------------------------------------------------------------------------------
 
 loadAllPublished :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
@@ -140,6 +147,6 @@ loadAllPublishedSnapshots p = filterM published =<< loadAllSnapshots p "content"
 feedRule f = do
     route idRoute
     compile $ do
-        let feedCtx = postCtx `mappend` teaserField "description" "content" `mappend` bodyField "description" 
+        let feedCtx = postCtx `mappend` teaserField "description" "content" `mappend` bodyField "description"
         posts <- fmap (take 10) . recentFirst =<< loadAllPublishedSnapshots "posts/*"
         f feedConfiguration feedCtx posts
