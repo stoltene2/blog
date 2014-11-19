@@ -92,3 +92,23 @@ h1, h2, h3, h4, h5, h6 {
 .navbar .active{
     background-image: url("/images/unselected.png");
 }
+
+
+code {
+    background-color: #f9f2f4;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    color: #555;
+    font-size: 80%;
+    padding: 1px 2px;
+    white-space: nowrap;
+}
+.sourceCode {
+    font-size: 85%;
+}
+
+
+.figure {
+
+}
