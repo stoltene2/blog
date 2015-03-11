@@ -1,16 +1,20 @@
+{-# LANGUAGE OverloadedStrings #-}
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend)
-import           Hakyll
-import           Control.Applicative
+import Data.Monoid (mappend)
+import Control.Applicative
 import Control.Monad
-import           Data.Map (member)
+import Data.Map (member)
 import Data.Typeable
 import Data.Binary
+import Data.Maybe (fromMaybe)
 import Data.Monoid
 import Data.Maybe
+import Data.Char (toLower)
 
 import System.FilePath.Posix  (takeBaseName,takeDirectory,(</>),splitFileName)
+
+import Hakyll
 
 
 feedConfiguration :: FeedConfiguration
@@ -133,16 +137,17 @@ postCtx =
 --------------------------------------------------------------------------------
 
 loadAllPublished :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
-loadAllPublished p = filterM published =<< loadAll p
-  where
-    published i = isJust <$> getMetadataField (itemIdentifier i) "published"
+loadAllPublished p = filterM isPublished =<< loadAll p
+
+
+isPublished :: (Typeable a, Binary a) => Item a -> Compiler Bool
+isPublished ident = do
+  val <- fromMaybe "false" <$> getMetadataField (itemIdentifier ident) "published"
+  return (val == "true")
 
 
 loadAllPublishedSnapshots :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
-loadAllPublishedSnapshots p = filterM published =<< loadAllSnapshots p "content"
-  where
-    published i = isJust <$> getMetadataField (itemIdentifier i) "published"
-
+loadAllPublishedSnapshots p = filterM isPublished =<< loadAllSnapshots p "content"
 
 feedRule f = do
     route idRoute
