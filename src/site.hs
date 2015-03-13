@@ -76,16 +76,24 @@ For <article-name>/article.markdown
 
 -}
 
-    matchMetadata "posts/*/article.markdown" published $ do
-        route $ gsubRoute "article" (const "index") `composeRoutes` setExtension "html"
+    matchMetadata "posts/*/index.markdown" published $ do
+        route $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html" postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
-    match "posts/*/images/*" $ do
-        route idRoute
-        compile copyFileCompiler
+        match "posts/*/images/*" $ do
+            route idRoute
+            compile copyFileCompiler
+
+        match "posts/*/js/*" $ do
+            route idRoute
+            compile copyFileCompiler
+
+        match "posts/*/css/*" $ do
+            route idRoute
+            compile compressCssCompiler
 
 --------------------------------------------------------------------------------
 -- Archive page
