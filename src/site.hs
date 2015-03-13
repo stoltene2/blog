@@ -12,6 +12,8 @@ import Data.Monoid
 import Data.Maybe
 import Data.Char (toLower)
 
+import qualified Data.Map as M (Map, lookup)
+
 import System.FilePath.Posix  (takeBaseName,takeDirectory,(</>),splitFileName)
 
 import Hakyll
@@ -60,6 +62,30 @@ main = hakyllWith config $ do
           >>= loadAndApplyTemplate "templates/default.html" postCtx
           >>= relativizeUrls
 
+--------------------------------------------------------------------------------
+-- Blog directories
+{-
+Here is the general goal of blog directories
+
+For <article-name>/article.markdown
+
+1. Create posts/<article-name>/index.html
+2. Copy css directly
+3. Copy js directly
+4. Copy images directly
+
+-}
+
+    matchMetadata "posts/*/article.markdown" published $ do
+        route $ gsubRoute "article" (const "index") `composeRoutes` setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/post.html" postCtx
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= relativizeUrls
+
+    match "posts/*/images/*" $ do
+        route idRoute
+        compile copyFileCompiler
 
 --------------------------------------------------------------------------------
 -- Archive page
@@ -67,7 +93,7 @@ main = hakyllWith config $ do
     create ["archive"] $ do
         route (setExtension ".html")
         compile $ do
-            posts <- recentFirst =<< loadAllPublished "posts/*"
+            posts <- recentFirst =<< loadAllPublished ("posts/**/*.markdown" .||. "posts/*.markdown")
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
@@ -144,6 +170,10 @@ isPublished :: (Typeable a, Binary a) => Item a -> Compiler Bool
 isPublished ident = do
   val <- fromMaybe "false" <$> getMetadataField (itemIdentifier ident) "published"
   return (val == "true")
+
+published :: M.Map String String -> Bool
+published md = Just "true" == pub
+  where pub = "published" `M.lookup` md
 
 
 loadAllPublishedSnapshots :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
