@@ -160,6 +160,9 @@ For <article-name>/article.markdown
 
 ------------------------------------------------------------------------------
 
+routeToRoot :: Rules ()
+routeToRoot = route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
+
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y"   `mappend`
