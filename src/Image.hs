@@ -50,28 +50,35 @@ resizeImage :: (SaveBSImageType t)
 resizeImage imgType img w = load img >>= resizeToWidth (ix1 w) >>= save imgType
 
 
-load :: ByteString -> Either ResizeError RGBA
+load :: ByteString
+     -> Either ResizeError RGBA
+
 load img = case Image.loadBS Image.Autodetect img of
             Left err -> Left (DevILError err)
             Right i  -> Right i
 
-save :: (SaveBSImageType t) => t -> RGBA -> Either ResizeError ByteString
+
+save :: (SaveBSImageType t)
+        => t
+        -> RGBA
+        -> Either ResizeError ByteString
+
 save imgType img = case Image.saveBS imgType img of
             Left err -> Left (DevILError err)
             Right i  -> Right i
 
 
-resizeToWidth :: Width -> -- Width to resize to
-                 RGBA ->    -- Image Manifest type
-                 Either ResizeError RGBA -- Error or image
+resizeToWidth :: Width                   -- ^ Width to resize to
+              -> RGBA                    -- ^ Image Manifest type
+              -> Either ResizeError RGBA -- ^ Error or image
 
 resizeToWidth width img = scaledSize (shape img) width >>=
                           \newSize -> Right (resize Bilinear newSize img :: RGBA)
 
 
-scaledSize :: Size -- Original dimension
-           -> Width -- Desired width
-           -> Either ResizeError DIM2 -- Parameter error | new dimension
+scaledSize :: Size                    -- ^ Original dimension
+           -> Width                   -- ^ Desired width
+           -> Either ResizeError DIM2 -- ^ Parameter error | new dimension
 
 scaledSize orig@(Z:.y:.x) (Z:.width)
   | x <= 0 || y <= 0 || width <= 0 = Left DimensionTooSmall
