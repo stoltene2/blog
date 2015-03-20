@@ -46,12 +46,15 @@ cabal-version:       >=1.8
 
 executable personal-blog
   -- .hs or .lhs file containing the Main module.
-  main-is: src/site.hs
+  default-language:     Haskell2010
+  main-is: site.hs
 
-  ghc-options: -Wall -Werror
+  ghc-options: -Wall
 
   -- Modules included in this executable, other than Main.
-  -- other-modules:
+  hs-source-dirs: src
+
+  other-modules: Image
 
   -- Other library packages from which modules are imported.
   build-depends:       base >= 4.5

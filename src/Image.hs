@@ -50,12 +50,16 @@ resizeImage :: (SaveBSImageType t)
 resizeImage imgType img w = load img >>= resizeToWidth (ix1 w) >>= save imgType
 
 
+convError :: Either Image.StorageError b -> Either ResizeError b
+convError (Left e)  = Left (DevILError e)
+convError (Right b) = Right b
+
+
 load :: ByteString
      -> Either ResizeError RGBA
 
-load img = case Image.loadBS Image.Autodetect img of
-            Left err -> Left (DevILError err)
-            Right i  -> Right i
+load img = convError $ Image.loadBS Image.Autodetect img
+
 
 
 save :: (SaveBSImageType t)
@@ -63,9 +67,8 @@ save :: (SaveBSImageType t)
         -> RGBA
         -> Either ResizeError ByteString
 
-save imgType img = case Image.saveBS imgType img of
-            Left err -> Left (DevILError err)
-            Right i  -> Right i
+save imgType img = convError $ Image.saveBS imgType img
+
 
 
 resizeToWidth :: Width                   -- ^ Width to resize to
@@ -83,6 +86,6 @@ scaledSize :: Size                    -- ^ Original dimension
 scaledSize orig@(Z:.y:.x) (Z:.width)
   | x <= 0 || y <= 0 || width <= 0 = Left DimensionTooSmall
   | x <= width = Right orig
-  | otherwise = let aspectRatio = fromIntegral x / fromIntegral y
-                    fWidth = fromIntegral width
+  | otherwise = let aspectRatio = (fromIntegral x / fromIntegral y) :: Double
+                    fWidth = (fromIntegral width) :: Double
                 in Right (Z :. (floor (fWidth / aspectRatio)) :. width)
