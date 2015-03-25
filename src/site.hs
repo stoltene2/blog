@@ -1,22 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
---------------------------------------------------------------------------------
-{-# LANGUAGE OverloadedStrings #-}
-import Data.Monoid (mappend)
+module Main where
+
 import Control.Applicative
 import Control.Monad
-import Data.Map (member)
+
 import Data.Typeable
 import Data.Binary
-import Data.Maybe (fromMaybe)
+
 import Data.Monoid
 import Data.Maybe
-import Data.Char (toLower)
 
 import qualified Data.Map as M (Map, lookup)
 
-import System.FilePath.Posix  (takeBaseName,takeDirectory,(</>),splitFileName)
-
 import Hakyll
+
+import Image (resizeImageCompiler, PNG(..), JPG(..))
 
 
 feedConfiguration :: FeedConfiguration
@@ -35,14 +33,20 @@ config = defaultConfiguration
                       \_site/* stolten.net:/var/www/eric.stolten.net"
     }
 
+
+-- make compile item with * -> Compile (Item ByteString)
 main :: IO ()
 main = hakyllWith config $ do
 
 --------------------------------------------------------------------------------
 -- Assets
-    match "images/*" $ do
+    match "images/*.jpg" $ do
         route   idRoute
-        compile copyFileCompiler
+        compile (resizeImageCompiler JPG 900)
+
+    match "images/*.png" $ do
+        route idRoute
+        compile (resizeImageCompiler PNG 900)
 
     match "js/**" $ do
         route   idRoute
@@ -83,9 +87,14 @@ For <article-name>/article.markdown
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
-        match "posts/*/images/*" $ do
+        match "posts/*/images/*.jpg" $ do
             route idRoute
-            compile copyFileCompiler
+            compile (resizeImageCompiler JPG 900)
+
+        match "posts/*/images/*.png" $ do
+            route idRoute
+            compile (resizeImageCompiler PNG 900)
+
 
         match "posts/*/js/*" $ do
             route idRoute
@@ -189,6 +198,11 @@ published md = Just "true" == pub
 
 loadAllPublishedSnapshots :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
 loadAllPublishedSnapshots p = filterM isPublished =<< loadAllSnapshots p "content"
+
+
+feedRule :: (Writable a, Binary a1, Binary a, Typeable a1, Typeable a)
+            => (FeedConfiguration -> Context String -> [Item a1] -> Compiler (Item a))
+            -> Rules ()
 
 feedRule f = do
     route idRoute

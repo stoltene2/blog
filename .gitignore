@@ -12,3 +12,4 @@ _site
 /libpeerconnection.log
 /.cabal-sandbox/
 /cabal.sandbox.config
+/docset/
