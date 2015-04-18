@@ -13,3 +13,5 @@ _site
 /.cabal-sandbox/
 /cabal.sandbox.config
 /docset/
+/posts/.DS_Store
+/.DS_Store
