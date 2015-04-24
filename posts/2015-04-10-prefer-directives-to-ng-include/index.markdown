@@ -4,62 +4,62 @@ author: Eric Stolten
 published: true
 ---
 
-<div class="alert alert-warning" role="alert">
+_Did you push Angular to it's limits?_
+
+I thought so. But something didn't feel right. ...something about
+angular not beingr good...
+
+In this article I will show you how to speed up your AngularJS
+code. There may be code in your AngularJS application that can cause
+perplexing performance problems.
+
+I experienced many of these problems first hand and overcame one of
+them by with the method described below. In this specific scenario the
+culprits are an abuse of `ngInclude` directives nested inside
+`ngRepeat` directives. I will show you how to increase performance in
+your application if you use these two directives together.
+
+I hope you improve your performance like I did.
+
+## See the problem in action
+
+<div class="alert alert-info" role="alert">
 <p>
-<b>Warning</b>: This article is a work in progress.
-</p>
-<p>
-  Some details may be incorrect or incomplete.
+If you are following along switch to _master_ branch in the repository.
 </p>
 </div>
 
-# Random catch phrases
-* Angular is slow should I switch to react?
-* Angular is slow
-      * Anything is slow when you do it wrong
+##### Goals
 
-# Versions I tried this on
+* Kept the data as simple as possible
+* Added basic style to make the DOM larger and look somewhat clean
+* Small amount of code to demonstrate
+* Use a lot of elements to see the problem
+* Templates are _split up_ into multiple files for readability
 
-| Version |
-|---------|
-| 1.3.15  |
-| 1.4? |
+To keep the sample application simple for demonstration purposes
+I tried to keep the view simpler. In a real application you
+would likely have **more complicated** markup and you could see this
+problem with _fewer_ repeated nodes.
 
-Download the [source](http://www.github.com) and follow along.
+The layout of the application is quite simple. There is one main
+controller that generates a list of products. You can change the
+number of products be typing the desired number into the form and
+clicking _Generate_. If you click on the title of any product you will
+expand all products in the list.
 
-In each section of this article may reference a different branch for
-changes.
+The expansion of all the products is the task that will take quite a
+bit of time in the **master** branch of the repository.
 
-## Example app
-
-1. Kept the data as simple as possible
-1. Added some style to show the effect of dom parsing
-1. The important of performance -- The browser needs to do more
+You can see below that I created a template structure that matches the
+data as close as possible.
 
 <div class="row">
-
 <div class="col-xs-12 col-sm-6">
-
-#### Goal of the sample app
-
-1. Loads a JSON object for a list of products
-1. Each product contains
-     * name
-     * description
-     * List of specifications
-     * reviews
-1. Each product hides the specifications and reviews by default to
-   keep the DOM smaller. We will expand as necessary.
-1. We expand the details only when we want to see more
-
-Because we are creating a single page application we would like to
-make as much data accessible to the application as possible.
-
+![](images/template-layout.png)
 </div>
 
 <div class="col-xs-12 col-sm-6">
-
-#### Sample JS Obj
 
 ~~~ {.javascript .html}
 {
@@ -90,27 +90,106 @@ make as much data accessible to the application as possible.
 </div>
 </div>
 
-## A natural way of things
+### Template snippets
+Here are some snippets of the template structure for more context.
 
-1. Start with a large template with `ngRepeat`
-1. Refactor it for readability
+##### product.html
+~~~ {.html}
+<div class="row bs-callout">
+    <ng-include src="'views/product-title.html'"></ng-include>
+    <ng-include src="'views/product-details.html'"></ng-include>
+</div>
+~~~
 
-How one naturally chooses ng-include: large large templates
-There isn't any deep reason to have directives
+##### product-title.html
+~~~ {.html}
+<div class="row">
+    <h3 class="col-sm-6 title" ng-click="expand(product)">{{::product.name}}</h3>
+</div>
+~~~
 
-#### Make your code manageable
-What happens when we have large repeated elements?
-We break it down to smaller pieces. More files. Less confusion.
-The world is rosy.
+##### product-details.html
+~~~ {.html}
+<div ng-if="product.expanded" class="row">
 
-## A danger lurks
+    <div class="row description">
+        <div class="col-sm-8">
+            <p>{{::product.description}}</p>
+        </div>
+        <div class="col-sm-4">
+            <button type="button" class="btn btn-primary">Buy Now</button> ${{::product.price}}
+        </div>
 
-So far so good. Right? Well, as requirements change we find that we need to have *FIFTY*
+    </div>
 
-* Add 1000!
+    <div class="col-sm-12">
+        <ng-include src="'views/product-specs.html'"></ng-include>
+    </div>
 
-### Timeline of expanding all
+    <div class="col-sm-12">
+        <ng-include src="'views/product-reviews.html'"></ng-include>
+    </div>
+</div>
+~~~
 
+##### product-specs.html
+~~~ {.html}
+<div class="row">
+    <h4>Specifications</h4>
+    <div class="col-sm-12" ng-repeat="spec in ::product.specifications">
+        <div class="row">
+            <div class="col-sm-4">{{::spec.name}}</div>
+            <div class="col-sm-4">{{::spec.value}}</div>
+        </div>
+    </div>
+</div>
+~~~
+
+##### product-reviews.html
+~~~ {.html}
+<div class="row">
+    <h4>Reviews</h4>
+    <div class="description" ng-repeat="review in ::product.reviews">
+        <div class="row">
+            <div class="col-sm-8"><strong>Author</strong>: {{::review.userName}}</div>
+            <div class="col-sm-4"><strong>Rating</strong>: {{::review.rating}}</div>
+        </div>
+        <div class="row review-body">
+            <p class="col-sm-8">{{::review.review}}</p>
+        </div>
+    </div>
+</div>
+~~~
+
+When you look at these templates, one thing that should stand out is
+the judicious use of `ngInclude`. This was used in a situation where
+the `product.html` template became much too large to manage
+changes.
+
+The desire to split templates into smaller templates has many
+benefits. Besides having a smaller context the biggest win appears in
+the reduction of merge conflicts. Bad merges of templates lead to
+great frustration.
+
+In a similar scenario you may follow this path instead of using
+alternative methods. See what happens below if you do.
+
+### The problem
+
+<div class="alert alert-info" role="alert">
+<p>
+Still following along? Start the application with `grunt serve`.
+</p>
+</div>
+
+Play around with the application. Generate 1000 products in chrome then click on a headline.
+
+Did you notice how long that took?
+
+It is only partly because there are 1000 elements. I've included some
+screenshots of the [Chrome timeline](https://developer.chrome.com/devtools/docs/timeline) tool below.
+
+<br/>
 <div class="row">
 <div class="col-sm-6">
 
@@ -119,18 +198,16 @@ So far so good. Right? Well, as requirements change we find that we need to have
 </div>
 <div class="col-sm-6">
 
-There are a few things to observe in this screenshot.
+What stands out here?
 
-1. **7.68s**!? Why did this take so long?
-1. Javascript seems busy
-1. What are those blue regions with yellow mixed in?
-
-I'll zoom in to see more.
+* **7.68s**!? Why did this take so long?
+* Javascript seems busy
+* What are those blue regions with yellow mixed in?
 
 </div>
 </div>
 
-### Zoom in on timeline
+<br/>
 
 <div class="row">
 <div class="col-sm-6">
@@ -139,15 +216,15 @@ I'll zoom in to see more.
 </div>
 <div class="col-sm-6">
 
-Interesting. Those are not solid blue regions but specific items that
-trigger periodically. We can now see that the intermixed yellow
+Interesting. These are not solid blue regions but specific items that
+are executing **repeatedly**. We also see that the intermixed yellow
 regions are garbage collection. Let's zoom in another level to see
 what those blue regions more clearly.
 
 </div>
 </div>
 
-### Zoom in a little more...
+<br/>
 
 <div class="row">
 <div class="col-sm-6">
@@ -156,14 +233,12 @@ what those blue regions more clearly.
 </div>
 <div class="col-sm-6">
 
-It looks like we are doing a lot of parsing. This makes sense if we
+It looks like we are doing **a lot** of parsing. This makes sense if we
 think about it. Given the design of the application we include a new
-template in the DOM for each _Product_ when we expand their
+template in the DOM for each _Product_ when we expand all
 details.
 
-The templates are clean and separated. We can locate the components of
-the `Product` by navigating to the named view. This feels clean, but
-something is wrong.
+The template layout feels clean, but something is wrong.
 
 Taking a step back we should ask, "shouldn't those templates be compiled once for
 efficiency?" The answer is yes, but how do we get there? The simple
@@ -172,18 +247,51 @@ answer is to use what I've called _Thin Directives_.
 </div>
 </div>
 
-## Solution: Thin Directives
+## Thin Directives
 
-What is a _Thin Directive_? A _Thin Directive_ is a directive whose sole purpose is to provide a template.
+Use _Thin Directives_.
 
-But why? _Explanation on how directives compile templates_
+What is a _Thin Directive_? A _Thin Directive_ is a directive whose
+sole purpose is to provide a template. Here is the refactoring of the
+`ngInclude`s that we had in the beginning of the post.
 
-## Lets fixup our example
+<br/>
 
-Show results
+~~~ {.javascript}
+angular.module('app').directive('productTitle', function() {
+  return {
+    templateUrl: 'views/product-title.html'
+  };
+});
 
-## Measure again
-Wow that looks better.
+angular.module('app').directive('productDetails', function() {
+  return {
+    templateUrl: 'views/product-details.html'
+  };
+});
+
+angular.module('app').directive('productReviews', function() {
+  return {
+    templateUrl: 'views/product-reviews.html'
+  };
+});
+
+angular.module('app').directive('productSpecs', function() {
+  return {
+    templateUrl: 'views/product-specs.html'
+  };
+});
+~~~
+
+#### Lets check our example
+
+<div class="alert alert-info" role="alert">
+<p>
+Check out the _thin-directives_ branch. Relaunch!
+</p>
+</div>
+
+Have a look at the performance differences below. We've nearly **halved** the performance!
 
 <div class="row">
 <div class="col-sm-6">
@@ -194,13 +302,32 @@ Wow that looks better.
 </div>
 </div>
 
-## What happens here?
 
-Directives only run compile once if the template is a string.
+## TODO: Why does this work?
 
-`ngInclude` is not a string
+Directives only run compile once if the `templateUrl` is a string.
 
-Show a small example of compile running one vs. multiple times.
+`ngInclude` is a bit more complicated. It has a watcher on the `src`
+attribute inside the `compile` function. Have a look at the
+[ngInclude source](https://github.com/angular/angular.js/blob/master/src/ng/directive/ngInclude.js#L218) for some more insight.
+
+## Summary
+
+**Is ngInclude bad?**
+
+No. You need to pay special attention to where and how you use
+it. It's problem is exacerbated here because it is nested in
+multiple `ngRepeat` elements. Used sparingly you would never
+notice the difference.
+
+I recommend creating _more_ components from the beginning. You may
+create more source files but you will benefit greatly from the
+granular architecture of components. Besides most web frameworks are
+heading this way too.
+
+#### TODO: Closing
+* Thanks
+* links
 
 ## Influences
 
@@ -208,6 +335,4 @@ Show a small example of compile running one vs. multiple times.
 * That one blog article
 * Experimenting
 
-* Include links to using dev tools debugger
-* Fix padding on paragraphs next to pictures to make them line up closer.
-* Put pictures in a frame
+* TODO: Include links to using dev tools debugger
