@@ -6,16 +6,15 @@ published: true
 
 _Did you push Angular to it's limits?_
 
-I thought so. But something didn't feel right. ...something about
-angular not beingr good...
+I thought so. But something didn't feel right.
 
 In this article I will show you how to speed up your AngularJS
 code. There may be code in your AngularJS application that can cause
 perplexing performance problems.
 
-I experienced many of these problems first hand and overcame one of
+I experienced some of these problems first hand and overcame one of
 them by with the method described below. In this specific scenario the
-culprits are an abuse of `ngInclude` directives nested inside
+culprits were an abuse of `ngInclude` directives nested inside
 `ngRepeat` directives. I will show you how to increase performance in
 your application if you use these two directives together.
 
@@ -25,7 +24,8 @@ I hope you improve your performance like I did.
 
 <div class="alert alert-info" role="alert">
 <p>
-If you are following along switch to _master_ branch in the repository.
+
+Follow along by cloning the sample app from the [Github Repo](https://github.com/stoltene2/blog-ng-include-perf-problems).
 </p>
 </div>
 
@@ -187,7 +187,7 @@ Play around with the application. Generate 1000 products in chrome then click on
 Did you notice how long that took?
 
 It is only partly because there are 1000 elements. I've included some
-screenshots of the [Chrome timeline](https://developer.chrome.com/devtools/docs/timeline) tool below.
+screen shots of the [Chrome time-line](https://developer.chrome.com/devtools/docs/timeline) tool below.
 
 <br/>
 <div class="row">
@@ -287,7 +287,7 @@ angular.module('app').directive('productSpecs', function() {
 
 <div class="alert alert-info" role="alert">
 <p>
-Check out the _thin-directives_ branch. Relaunch!
+Check out the _thin-directives_ branch. Re-launch!
 </p>
 </div>
 
@@ -303,7 +303,7 @@ Have a look at the performance differences below. We've nearly **halved** the pe
 </div>
 
 
-## TODO: Why does this work?
+## Why does this work?
 
 Directives only run compile once if the `templateUrl` is a string.
 
@@ -325,14 +325,6 @@ create more source files but you will benefit greatly from the
 granular architecture of components. Besides most web frameworks are
 heading this way too.
 
-#### TODO: Closing
-* Thanks
-* links
-
-## Influences
-
-* Tor
-* That one blog article
-* Experimenting
-
-* TODO: Include links to using dev tools debugger
+It was
+[Ben Nadel's blog post that inspired my effort](http://www.bennadel.com/blog/2738-using-ngrepeat-with-nginclude-hurts-performance-in-angularjs.htm)
+to find some extreme performance problems in my application.
