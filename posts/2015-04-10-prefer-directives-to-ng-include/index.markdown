@@ -38,15 +38,15 @@ Follow along by cloning the sample app from the [Github Repo](https://github.com
 * Templates are _split up_ into multiple files for readability
 
 To keep the sample application simple for demonstration purposes
-I tried to keep the view simpler. In a real application you
+I attempted to keep the view simple. In a real application you
 would likely have **more complicated** markup and you could see this
 problem with _fewer_ repeated nodes.
 
-The layout of the application is quite simple. There is one main
-controller that generates a list of products. You can change the
-number of products be typing the desired number into the form and
-clicking _Generate_. If you click on the title of any product you will
-expand all products in the list.
+The layout of the application is quite simple as you can see
+below. There is one main controller that generates a list of
+products. You can change the number of products be typing the desired
+number into the form and clicking _Generate_. If you click on the
+title of any product you will expand all products in the list.
 
 The expansion of all the products is the task that will take quite a
 bit of time in the **master** branch of the repository.
@@ -168,7 +168,7 @@ changes.
 
 The desire to split templates into smaller templates has many
 benefits. Besides having a smaller context the biggest win appears in
-the reduction of merge conflicts. Bad merges of templates lead to
+the reduction of merge conflicts. Bad merges lead to
 great frustration.
 
 In a similar scenario you may follow this path instead of using
@@ -182,7 +182,7 @@ Still following along? Start the application with `grunt serve`.
 </p>
 </div>
 
-Play around with the application. Generate 1000 products in chrome then click on a headline.
+Play around with the application. Generate 1000 products in Chrome then click on a headline.
 
 Did you notice how long that took?
 
@@ -283,29 +283,46 @@ angular.module('app').directive('productSpecs', function() {
 });
 ~~~
 
+<br/>
+
+I've replaced **all** `ngInclude` directives with the new custom
+directives. To save space I'll only include one example.
+
+<br/>
+
+##### product.html
+~~~ {.html}
+<div class="row bs-callout">
+    <product-title></product-title>
+    <product-details></product-details>
+</div>
+~~~
+
 #### Lets check our example
 
 <div class="alert alert-info" role="alert">
 <p>
-Check out the _thin-directives_ branch. Re-launch!
+Check out the [thin-directives](https://github.com/stoltene2/blog-ng-include-perf-problems/tree/thin-directives) branch. Re-launch!
 </p>
 </div>
 
-Have a look at the performance differences below. We've nearly **halved** the performance!
+Have a look at the performance differences below. We've nearly **halved** the performance with 3.27s!
 
+<br/>
 <div class="row">
 <div class="col-sm-6">
-![devtools stuff](images/expand-all-components.png)
+![](images/expand-all-components.png)
 </div>
 <div class="col-sm-6">
-![devtools stuff](images/expand-all-components-zoom.png)
+![](images/expand-all-components-zoom.png)
 </div>
 </div>
 
 
 ## Why does this work?
 
-Directives only run compile once if the `templateUrl` is a string.
+Directives only run compile once by default unless you provide extra
+compile functions.
 
 `ngInclude` is a bit more complicated. It has a watcher on the `src`
 attribute inside the `compile` function. Have a look at the
@@ -316,15 +333,21 @@ attribute inside the `compile` function. Have a look at the
 **Is ngInclude bad?**
 
 No. You need to pay special attention to where and how you use
-it. It's problem is exacerbated here because it is nested in
-multiple `ngRepeat` elements. Used sparingly you would never
-notice the difference.
+it. It's problem is exacerbated because it is nested in multiple
+`ngRepeat` elements. If used sparingly you would likely never notice
+the difference.
 
-I recommend creating _more_ components from the beginning. You may
-create more source files but you will benefit greatly from the
-granular architecture of components. Besides most web frameworks are
-heading this way too.
+However, I recommend creating **more** components from the
+beginning. It produces more source files but you will benefit _greatly_ from
+the granular architecture of components. Besides most web frameworks
+are heading this way too.
 
 It was
 [Ben Nadel's blog post that inspired my effort](http://www.bennadel.com/blog/2738-using-ngrepeat-with-nginclude-hurts-performance-in-angularjs.htm)
 to find some extreme performance problems in my application.
+
+Thank you, Torgeir, over at
+[Syntax success](http://www.syntaxsuccess.com) for testing the nuances
+of Angular.
+
+Let me know on Twitter if this was helpful to you!
