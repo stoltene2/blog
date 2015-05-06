@@ -14,7 +14,7 @@ import qualified Data.Map as M (Map, lookup)
 
 import Hakyll
 
-import Image (resizeImageCompiler, PNG(..), JPG(..))
+import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
 
 
 feedConfiguration :: FeedConfiguration
@@ -46,7 +46,7 @@ main = hakyllWith config $ do
 
     match "images/*.png" $ do
         route idRoute
-        compile (resizeImageCompiler PNG 900)
+        compile $ resizeImageCompiler PNG 900 >>= withItemBody (unixFilterLBS "pngquant" ["-"])
 
     match "js/**" $ do
         route   idRoute
@@ -93,8 +93,7 @@ For <article-name>/article.markdown
 
         match "posts/*/images/*.png" $ do
             route idRoute
-            compile (resizeImageCompiler PNG 900)
-
+            compile $ resizeImageCompiler PNG 900 >>= withItemBody (unixFilterLBS "pngquant" ["-"])
 
         match "posts/*/js/*" $ do
             route idRoute

@@ -1,4 +1,4 @@
-module Image
+module Image.Resize
        ( resizeImage
        , resizeImageCompiler
        , PNG(..)
