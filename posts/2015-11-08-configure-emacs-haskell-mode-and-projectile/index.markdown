@@ -18,6 +18,13 @@ then the default configuration for projectile will need tuning. Check
 out [Stack](https://github.com/commercialhaskell/stack) if you haven't
 already. It might change the way you develop Haskell applications.
 
+There are three goals for configuring my Haskell project with
+projectile in Emacs.
+
+1. Configure projectile's build command `C-c p c`, to use stack
+1. Configure projectile's test command `C-c p P`, to use stack
+1. Hook into projectile's toggle between test and implementation for test files ending in "Spec"
+
 Below I will present two different options for configuring Haskell and
 [Projectile](http://batsov.com/projectile/). First, global editor
 configuration for your project settings. Second, project specific
@@ -66,7 +73,7 @@ command. The power of
 [.dir-locals.el](http://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html#Directory-Variables)
 comes from the ability to specify configuration based on current mode,
 current directory, or sub-directory. This is powerful in a web
-application where you have a test command for the backend and a
+application where you have a test command for the back-end and a
 separate test command for Javascript tests.
 
 The _biggest_ disadvantage is safety. If you check your
@@ -78,7 +85,7 @@ arbitrary code if you are not careful.
 
 Now, you can get around this by declaring variables as safe in your
 Emacs configuration as I will show you below. This essentially adds
-commands verified by you to a whitelist. For the annoyance factor
+commands verified by you to a white-list. For the annoyance factor
 alone, I would recommend not checking this file into source control
 and provide friendly instructions on your Wiki for your fellow
 Emacsers.
@@ -113,7 +120,7 @@ you'll need to declare these variables as safe. If you follow this
 approach, you should use this mechanism to white list the
 configuration for your project.
 
-Here is an example of whitelisting the settings from the dir-locals in
+Here is an example of white-listing the settings from the dir-locals in
 your local Emacs configuration.
 
 ~~~ {.sourceCode .lisp}
