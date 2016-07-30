@@ -1,17 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Control.Applicative
 import Control.Monad
+
+
 
 import Data.Typeable
 import Data.Binary
 
-import Data.Monoid
 import Data.Maybe
 
-import qualified Data.Map as M (Map, lookup)
+import qualified Data.HashMap.Strict as M (lookup)
 
+import qualified Data.Aeson as A (Value(..))
 import Hakyll
 
 import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
@@ -58,7 +59,7 @@ main = hakyllWith config $ do
 
 --------------------------------------------------------------------------------
 -- Individual blog posts
-    match "posts/*" $ do
+    match "posts/*.markdown" $ do
         route $ setExtension ".html"
         compile $ pandocCompiler
           >>= saveSnapshot "content"
@@ -181,25 +182,28 @@ postCtx =
 
 --------------------------------------------------------------------------------
 
-loadAllPublished :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
+loadAllPublished :: (Typeable a, Binary a, Show a) => Pattern -> Compiler [Item a]
 loadAllPublished p = filterM isPublished =<< loadAll p
 
 
-isPublished :: (Typeable a, Binary a) => Item a -> Compiler Bool
+isPublished :: (Typeable a, Binary a, Show a) => Item a -> Compiler Bool
 isPublished ident = do
   val <- fromMaybe "false" <$> getMetadataField (itemIdentifier ident) "published"
   return (val == "true")
 
-published :: M.Map String String -> Bool
-published md = Just "true" == pub
-  where pub = "published" `M.lookup` md
+
+published :: Metadata -> Bool
+published md = pub
+  where pub = case "published" `M.lookup` md of
+                Just (A.Bool t) -> t
+                _      -> False
 
 
-loadAllPublishedSnapshots :: (Typeable a, Binary a) => Pattern -> Compiler [Item a]
+loadAllPublishedSnapshots :: (Typeable a, Binary a, Show a) => Pattern -> Compiler [Item a]
 loadAllPublishedSnapshots p = filterM isPublished =<< loadAllSnapshots p "content"
 
 
-feedRule :: (Writable a, Binary a1, Binary a, Typeable a1, Typeable a)
+feedRule :: (Writable a, Binary a1, Binary a, Typeable a1, Typeable a, Show a, Show a1)
             => (FeedConfiguration -> Context String -> [Item a1] -> Compiler (Item a))
             -> Rules ()
 

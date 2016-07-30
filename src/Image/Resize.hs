@@ -14,7 +14,7 @@ import Vision.Image.Storage.DevIL (SaveBSImageType, PNG(..), JPG(..))
 import qualified Vision.Image.Storage.DevIL as Image
 
 import Vision.Primitive       (Size)
-import Vision.Primitive.Shape (ix1, (:.)(..), Z(..), DIM1(..), DIM2(..))
+import Vision.Primitive.Shape (ix1, (:.)(..), Z(..), DIM1, DIM2)
 
 import Vision.Image.Class     (shape)
 import Vision.Image.RGBA.Type (RGBA)

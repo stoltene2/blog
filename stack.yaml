@@ -1,5 +1,25 @@
+user-message: ! ' Ensure the following libraries are installed on your system.
+
+* brew install devil
+
+* brew install pngquant
+
+'
+
 flags: {}
+
 packages:
-- '.'
-extra-deps: [friday-0.2.2.0, friday-devil-0.1.1.1, hfsevents-0.1.5, ratio-int-0.1.2]
-resolver: lts-2.22
+  - '.'
+
+extra-deps:
+  - friday-0.2.2.0
+  - friday-devil-0.1.1.1
+  - ratio-int-0.1.2
+
+extra-include-dirs:
+  - /usr/local/Cellar/devil/1.7.8_3/include
+
+extra-lib-dirs:
+  - /usr/local/Cellar/devil/1.7.8_3/lib
+
+resolver: lts-6.9
