@@ -47,9 +47,7 @@ module.exports = function (plop) {
 
   }
 
-  function extendAnswers(answers) {
-    answers.postPath = plop.renderString('{{postDate}}-{{dashCase postTitle}}', answers);
-  }
+  plop.addPartial('postPath', '{{postDate}}-{{dashCase postTitle}}');
 
   plop.setGenerator('Post', {
     description: 'Create new blog post structure',
@@ -58,20 +56,19 @@ module.exports = function (plop) {
       promptPostTitle()
     ],
     actions: function(answers) {
-      extendAnswers(answers);
       return [
         {
           type: 'add',
-          path: 'posts/{{postPath}}/index.markdown',
+          path: 'posts/{{> postPath}}/index.markdown',
           templateFile: 'plop/templates/index.markdown.tmpl'
         },
         {
           type: 'add',
-          path: 'posts/{{postPath}}/images/.gitignore'
+          path: 'posts/{{> postPath}}/images/.gitignore'
         },
         {
           type: 'add',
-          path: 'posts/{{postPath}}/partials/.gitignore'
+          path: 'posts/{{> postPath}}/partials/.gitignore'
         }
       ];
     }
