@@ -3,8 +3,6 @@ module Main where
 
 import Control.Monad
 
-
-
 import Data.Typeable
 import Data.Binary
 
