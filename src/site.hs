@@ -111,10 +111,6 @@ For <article-name>/article.markdown
             posts <- recentFirst =<< loadAllPublished ("posts/**/*.markdown" .||. "posts/*.markdown")
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Archives"            `mappend`
-                    constField "blogLink" "active"           `mappend`
-                    constField "homeLink" ""                 `mappend`
-                    constField "aboutLink" ""                `mappend`
                     defaultContext
 
             makeItem ""
@@ -127,32 +123,18 @@ For <article-name>/article.markdown
     match "pages/index.html" $ do
         route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
         compile $ do
-            let homeCtx =
-                  constField "title" "Home"                `mappend`
-                  constField "homeLink" "active"           `mappend`
-                  constField "blogLink" ""                 `mappend`
-                  constField "aboutLink" ""                `mappend`
-                  defaultContext
-
             getResourceBody
-                >>= applyAsTemplate homeCtx
-                >>= loadAndApplyTemplate "templates/default.html" homeCtx
+                >>= applyAsTemplate defaultContext
+                >>= loadAndApplyTemplate "templates/default.html" defaultContext
                 >>= relativizeUrls
 
 
     match "pages/about.md" $ do
         route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
         compile $ do
-            let homeCtx =
-                  constField "title" "About"                `mappend`
-                  constField "homeLink" ""                  `mappend`
-                  constField "blogLink" ""                  `mappend`
-                  constField "aboutLink" "active"           `mappend`
-                  defaultContext
-
             pandocCompiler
-                >>= applyAsTemplate homeCtx
-                >>= loadAndApplyTemplate "templates/default.html" homeCtx
+                >>= applyAsTemplate defaultContext
+                >>= loadAndApplyTemplate "templates/default.html" defaultContext
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
@@ -171,12 +153,7 @@ routeToRoot :: Rules ()
 routeToRoot = route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
 
 postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y"   `mappend`
-    constField "blogLink" "active" `mappend`
-    constField "homeLink" ""       `mappend`
-    constField "aboutLink" ""      `mappend`
-    defaultContext
+postCtx = dateField "date" "%B %e, %Y" `mappend` defaultContext
 
 --------------------------------------------------------------------------------
 
