@@ -29,7 +29,8 @@ feedConfiguration =  FeedConfiguration
 
 config :: Configuration
 config = defaultConfiguration
-    { deployCommand = "rsync --checksum -av \
+    { providerDirectory = "./site"
+    , deployCommand = "rsync --checksum -av \
                       \_site/* stolten.net:/var/www/eric.stolten.net"
     }
 
