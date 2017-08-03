@@ -95,7 +95,7 @@ For <article-name>/article.markdown
 --------------------------------------------------------------------------------
 -- Index page
     match "pages/index.html" $ do
-        route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
+        routePagesToRoot
         compile $ getResourceBody
           >>= applyAsTemplate defaultContext
           >>= loadAndApplyTemplate "templates/default.html" defaultContext
@@ -103,7 +103,7 @@ For <article-name>/article.markdown
 
 
     match "pages/about.md" $ do
-        route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
+        routePagesToRoot
         compile $ pandocCompiler
           >>= applyAsTemplate defaultContext
           >>= loadAndApplyTemplate "templates/default.html" defaultContext
@@ -121,8 +121,9 @@ For <article-name>/article.markdown
 
 ------------------------------------------------------------------------------
 
-routeToRoot :: Rules ()
-routeToRoot = route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
+routePagesToRoot :: Rules ()
+routePagesToRoot = route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
+
 
 postCtx :: Context String
 postCtx = dateField "date" "%B %e, %Y" `mappend` defaultContext
