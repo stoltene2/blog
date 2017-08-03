@@ -3,6 +3,7 @@ module Main where
 
 import Control.Monad
 
+import Data.Monoid ((<>))
 import Data.Typeable
 import Data.Binary
 
@@ -36,9 +37,7 @@ config = defaultConfiguration
 -- make compile item with * -> Compile (Item ByteString)
 main :: IO ()
 main = hakyllWith config $ do
-
---------------------------------------------------------------------------------
--- Assets
+    -- Assets
     match "images/*.jpg" $ do
         route   idRoute
         compile (resizeImageCompiler JPG 900)
@@ -57,16 +56,8 @@ main = hakyllWith config $ do
 
 --------------------------------------------------------------------------------
 -- Individual blog posts
-    match "posts/*.markdown" $ do
-        route $ setExtension ".html"
-        compile $ pandocCompiler
-          >>= saveSnapshot "content"
-          >>= loadAndApplyTemplate "templates/post.html"    postCtx
-          >>= loadAndApplyTemplate "templates/default.html" postCtx
-          >>= relativizeUrls
-
---------------------------------------------------------------------------------
 -- Blog directories
+--
 {-
 Here is the general goal of blog directories
 
@@ -79,36 +70,18 @@ For <article-name>/article.markdown
 
 -}
 
-    matchMetadata "posts/*/index.markdown" published $ do
-        route $ setExtension "html"
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html" postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
-            >>= relativizeUrls
+    pages "posts"
 
-        match "posts/*/images/*.jpg" $ do
-            route idRoute
-            compile (resizeImageCompiler JPG 900)
 
-        match "posts/*/images/*.png" $ do
-            route idRoute
-            compile $ resizeImageCompiler PNG 900 >>= withItemBody (unixFilterLBS "pngquant" ["-"])
-
-        match "posts/*/js/*" $ do
-            route idRoute
-            compile copyFileCompiler
-
-        match "posts/*/css/*" $ do
-            route idRoute
-            compile compressCssCompiler
-
+    pages "drafts"
+    -- Next, abstract posts and add drafts directory that are not part of published
 --------------------------------------------------------------------------------
 -- Archive page
 
     create ["archive"] $ do
         route (setExtension ".html")
         compile $ do
-            posts <- recentFirst =<< loadAllPublished ("posts/**/*.markdown" .||. "posts/*.markdown")
+            posts <- recentFirst =<< loadAllPublished "posts/**/*.markdown"
             let archiveCtx =
                     listField "posts" postCtx (return posts) `mappend`
                     defaultContext
@@ -122,20 +95,18 @@ For <article-name>/article.markdown
 -- Index page
     match "pages/index.html" $ do
         route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
-        compile $ do
-            getResourceBody
-                >>= applyAsTemplate defaultContext
-                >>= loadAndApplyTemplate "templates/default.html" defaultContext
-                >>= relativizeUrls
+        compile $ getResourceBody
+          >>= applyAsTemplate defaultContext
+          >>= loadAndApplyTemplate "templates/default.html" defaultContext
+          >>= relativizeUrls
 
 
     match "pages/about.md" $ do
         route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
-        compile $ do
-            pandocCompiler
-                >>= applyAsTemplate defaultContext
-                >>= loadAndApplyTemplate "templates/default.html" defaultContext
-                >>= relativizeUrls
+        compile $ pandocCompiler
+          >>= applyAsTemplate defaultContext
+          >>= loadAndApplyTemplate "templates/default.html" defaultContext
+          >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
 
@@ -154,6 +125,39 @@ routeToRoot = route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension
 
 postCtx :: Context String
 postCtx = dateField "date" "%B %e, %Y" `mappend` defaultContext
+
+
+--------------------------------------------------------------------------------
+-- Abstract way to generate a post from a generic root directory
+
+pages :: String -> Rules()
+pages base = do
+  match (relativeGlob "/*/index.markdown") $ do
+    route $ setExtension "html"
+
+    compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/post.html" postCtx
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= relativizeUrls
+
+    match (relativeGlob "/*/images/*.jpg") $ do
+            route idRoute
+            compile (resizeImageCompiler JPG 900)
+
+    match (relativeGlob "/*/images/*.png") $ do
+            route idRoute
+            compile $ resizeImageCompiler PNG 900 >>= withItemBody (unixFilterLBS "pngquant" ["-"])
+
+    match (relativeGlob "/*/js/*") $ do
+            route idRoute
+            compile copyFileCompiler
+
+    match (relativeGlob "/*/css/*") $ do
+            route idRoute
+            compile compressCssCompiler
+
+   where
+     relativeGlob glob = fromGlob (base <> glob)
 
 --------------------------------------------------------------------------------
 
