@@ -10,16 +10,17 @@ import Hakyll
 import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
 
 --------------------------------------------------------------------------------
--- * Move sub pages like about into something like /about/index.html
--- * Add teaser field to all pages and load snapshots on main page
 -- * Add robots.txt and exclude drafts
--- * Generate sitemap page
+-- * Add teaser field to all pages and load snapshots on main page
+-- * Add html5 tags
+-- * Read configuration data from yaml files
+
 -- * Move blog to S3 bucket
+-- * Generate sitemap page
 -- * Get SSL certificate?
--- * Profile the page for inefficiencies
 -- * Add twitter style meta data tags to each page and add to plop
 -- * Add bulma for styling
--- * Add html5 tags
+-- * Profile the page for inefficiencies
 
 
 feedConfiguration :: FeedConfiguration
@@ -40,72 +41,69 @@ config = defaultConfiguration
     }
 
 
--- make compile item with * -> Compile (Item ByteString)
 main :: IO ()
 main = hakyllWith config $ do
+  match "robots.txt" $ do
+    route   idRoute
+    compile copyFileCompiler
+
     -- Assets
-    match "images/*.jpg" $ do
-      route   idRoute
-      compile (resizeImageCompiler JPG 900)
+  match "images/*.jpg" $ do
+    route   idRoute
+    compile (resizeImageCompiler JPG 900)
 
-    match "images/*.png" $ do
-      route idRoute
-      compile $ resizeImageCompiler PNG 900 >>= withItemBody (unixFilterLBS "pngquant" ["-"])
+  match "images/*.png" $ do
+    route idRoute
+    compile $ resizeImageCompiler PNG 900 >>= withItemBody (unixFilterLBS "pngquant" ["-"])
 
-    match "js/**" $ do
-      route   idRoute
-      compile copyFileCompiler
+  match "js/**" $ do
+    route   idRoute
+    compile copyFileCompiler
 
-    match "css/*" $ do
-      route   idRoute
-      compile compressCssCompiler
+  match "css/*" $ do
+    route   idRoute
+    compile compressCssCompiler
 
-    pages "posts"
-    pages "drafts"
+  pages "posts"
+  pages "drafts"
 
---------------------------------------------------------------------------------
--- Archive page
+  -- Archive page
+  create ["archive"] $ do
+    route (setExtension ".html")
+    compile $ do
+      posts <- recentFirst =<< loadAll  "posts/**/*.markdown"
+      let archiveCtx = listField "posts" postCtx (return posts) `mappend` defaultContext
 
-    create ["archive"] $ do
-      route (setExtension ".html")
-      compile $ do
-        posts <- recentFirst =<< loadAll  "posts/**/*.markdown"
-        let archiveCtx = listField "posts" postCtx (return posts) `mappend` defaultContext
-
-        makeItem ""
-          >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-          >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-          >>= relativizeUrls
-
---------------------------------------------------------------------------------
--- Index page
-    match "pages/index.html" $ do
-      routePagesToRoot
-      compile $ getResourceBody
-        >>= applyAsTemplate defaultContext
-        >>= loadAndApplyTemplate "templates/default.html" defaultContext
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+        >>= loadAndApplyTemplate "templates/default.html" archiveCtx
         >>= relativizeUrls
 
-    match "pages/about.md" $ do
-      routePagesToRoot
-      compile $ pandocCompiler
-        >>= applyAsTemplate defaultContext
-        >>= loadAndApplyTemplate "templates/default.html" defaultContext
-        >>= relativizeUrls
+  match "pages/index.html" $ do
+    routePagesToRoot
+    compile $ getResourceBody
+      >>= applyAsTemplate defaultContext
+      >>= loadAndApplyTemplate "templates/default.html" defaultContext
+      >>= relativizeUrls
 
-    match "templates/*" $ compile templateCompiler
+  match "pages/about.md" $ do
+    routePagesToRoot
+    compile $ pandocCompiler
+      >>= applyAsTemplate defaultContext
+      >>= loadAndApplyTemplate "templates/default.html" defaultContext
+      >>= relativizeUrls
 
---------------------------------------------------------------------------------
--- XML Feed generation
+  match "templates/*" $ compile templateCompiler
 
-    create ["atom.xml"] (feedRule renderAtom)
-    create ["rss.xml"] (feedRule renderRss)
+  -- Feed generation
+  create ["atom.xml"] (feedRule renderAtom)
+  create ["rss.xml"] (feedRule renderRss)
 
 
 ------------------------------------------------------------------------------
-
 routePagesToRoot :: Rules ()
-routePagesToRoot = route $ gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
+routePagesToRoot = route $
+  gsubRoute "pages/" (const "") `composeRoutes` setExtension ".html"
 
 
 postCtx :: Context String
