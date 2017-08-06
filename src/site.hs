@@ -17,6 +17,18 @@ import Hakyll
 import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
 
 
+--------------------------------------------------------------------------------
+-- * Move sub pages like about into something like /about/index.html
+-- * Remove remnants of 'published'
+-- * Add teaser field to all pages and load snapshots on main page
+-- * Add robots.txt and exclude drafts
+-- * Generate sitemap page
+-- * Move blog to S3 bucket
+-- * Get SSL certificate?
+-- * Profile the page for inefficiencies
+-- * Add twitter style meta data tags to each page and add to plop
+
+
 feedConfiguration :: FeedConfiguration
 feedConfiguration =  FeedConfiguration
     { feedTitle       = "Programming the smart way."

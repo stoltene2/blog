@@ -1,0 +1,25 @@
+~~~ {.javascript .html}
+{
+  products: [
+    {
+      name: "Develop fast apps",
+      price: 10.35,
+      description: "A long description",
+      specifications: [
+        {
+          name: "weight",
+          value: "3"
+        }
+      ],
+      reviews: [
+        {
+          userName: "Eric Stolten"
+          rating: 5,
+          review: "Really long review"
+        }
+      ]
+    }
+  ]
+}
+
+~~~
