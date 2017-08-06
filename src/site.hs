@@ -10,16 +10,18 @@ import Hakyll
 import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
 
 --------------------------------------------------------------------------------
--- * Add robots.txt and exclude drafts
--- * Add teaser field to all pages and load snapshots on main page
+-- * Load snapshots on main page
 -- * Add html5 tags
+-- * Add rss/atom to footer of page
 -- * Read configuration data from yaml files
 
 -- * Move blog to S3 bucket
 -- * Generate sitemap page
+-- * Setup eric.stolten.net
+-- * Setup google console for my domain
 -- * Get SSL certificate?
 -- * Add twitter style meta data tags to each page and add to plop
--- * Add bulma for styling
+-- * Add bulma for styling, add hakyll-sass
 -- * Profile the page for inefficiencies
 
 
@@ -64,6 +66,7 @@ main = hakyllWith config $ do
     route   idRoute
     compile compressCssCompiler
 
+  -- Blog posts
   pages "posts"
   pages "drafts"
 
@@ -71,8 +74,10 @@ main = hakyllWith config $ do
   create ["archive"] $ do
     route (setExtension ".html")
     compile $ do
-      posts <- recentFirst =<< loadAll  "posts/**/*.markdown"
-      let archiveCtx = listField "posts" postCtx (return posts) `mappend` defaultContext
+      posts <- recentFirst =<< loadAllSnapshots "posts/**/index.markdown" "teaserContent"
+
+      let archiveCtx = listField "posts" (teaserField "teaser" "teaserContent" <> postCtx) (return posts)
+                    <> defaultContext
 
       makeItem ""
         >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -107,18 +112,19 @@ routePagesToRoot = route $
 
 
 postCtx :: Context String
-postCtx = dateField "date" "%B %e, %Y" `mappend` defaultContext
+postCtx = metadataField <> dateField "date" "%B %e, %Y" <> defaultContext
 
 
 --------------------------------------------------------------------------------
 -- Abstract way to generate a post from a generic root directory
-
-pages :: String -> Rules()
+pages :: String
+      -> Rules()
 pages base =
   match (relativeGlob "/*/index.markdown") $ do
     route $ setExtension "html"
 
     compile $ pandocCompiler
+      >>= saveSnapshot "teaserContent"
       >>= loadAndApplyTemplate "templates/post.html" postCtx
       >>= loadAndApplyTemplate "templates/default.html" postCtx
       >>= relativizeUrls
@@ -151,6 +157,9 @@ feedRule :: (Writable a, Binary a1, Binary a, Typeable a1, Typeable a, Show a, S
 feedRule f = do
   route idRoute
   compile $ do
-    let feedCtx = postCtx `mappend` teaserField "description" "content" `mappend` bodyField "description"
-    posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots  "posts/*" "content"
+    let feedCtx = postCtx
+               <> teaserField "description" "teaserContent"
+               <> bodyField "description"
+
+    posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots  "posts/**/index.markdown" "teaserContent"
     f feedConfiguration feedCtx posts

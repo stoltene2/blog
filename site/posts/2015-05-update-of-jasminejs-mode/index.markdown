@@ -1,7 +1,7 @@
 ---
 title: Update of jasminejs-mode 2.0
 author: Eric Stolten
-published: true
+description: This mode has been changed to accomodate Jasmine 2.1 and beyond for test focusing.
 date: 2015-05-29
 ---
 

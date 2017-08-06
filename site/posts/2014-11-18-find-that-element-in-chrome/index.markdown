@@ -1,8 +1,11 @@
 ---
 title: Find that element in Chrome
 author: Eric Stolten
-published: true
+description: Did you ever wonder how you could interact with a deeply nested DOM element inside of Chrome's developer tools?
 ---
+
+Did you ever wonder how you could interact with a deeply nested DOM
+element inside of Chrome's developer tools?
 
 First, open up the developer tools in _Chrome_. With the developer tools open,
 
@@ -35,7 +38,7 @@ finding the scope for a node and examining its attributes.
 (@) Example
 
     ![](/images/selected-element-console.png)
-    
+
 
 #### Web console snippet (try me out)
 ```javascript
@@ -43,8 +46,3 @@ var el = $($0);
 var scope = $($0).scope();
 scope.$$watchers.length
 ```
-
-
-
-
-

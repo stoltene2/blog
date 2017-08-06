@@ -1,7 +1,7 @@
 ---
 title: Announcing jasminejs-mode 1.0
+description: jasmine-js mode adds keyboard shortcuts and snippets for common testing workflows.
 author: Eric Stolten
-published: true
 ---
 
 ### jasminejs-mode for Emacs ###

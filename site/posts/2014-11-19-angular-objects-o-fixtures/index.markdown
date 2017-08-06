@@ -1,7 +1,7 @@
 ---
 title: Angular objects o'fixtures
 author: Eric Stolten
-published: true
+description: Bundle many json fixtures into one module in AngularJS.
 ---
 
 In an [AngularJS](http://www.angularjs.org) project at work, I found

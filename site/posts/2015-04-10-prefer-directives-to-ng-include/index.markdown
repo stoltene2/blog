@@ -1,12 +1,8 @@
 ---
 title: Prefer directives to ng-include
 author: Eric Stolten
-published: true
+description: Did you push Angular to it's limits? I thought so.
 ---
-
-_Did you push Angular to it's limits?_
-
-I thought so. But something didn't feel right.
 
 In this article I will show you how to speed up your AngularJS
 code. There may be code in your AngularJS application that can cause

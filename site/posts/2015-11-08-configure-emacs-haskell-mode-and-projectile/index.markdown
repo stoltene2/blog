@@ -1,7 +1,7 @@
 ---
 title: Configure Emacs haskell-mode with projectile
 author: Eric Stolten
-published: true
+description: Jump to a test file from its source.
 ---
 
 [Projectile](http://batsov.com/projectile/) is a powerful emacs mode
