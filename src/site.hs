@@ -86,10 +86,16 @@ main = hakyllWith config $ do
 
   match "pages/index.html" $ do
     routePagesToRoot
-    compile $ getResourceBody
-      >>= applyAsTemplate defaultContext
-      >>= loadAndApplyTemplate "templates/default.html" defaultContext
-      >>= relativizeUrls
+    compile $ do
+      posts <- fmap (take 5) . recentFirst =<< loadAllSnapshots "posts/**/index.markdown" "teaserContent"
+
+      let mainCtx = listField "posts" (teaserField "teaser" "teaserContent" <> postCtx) (return posts)
+                    <> defaultContext
+
+      getResourceBody
+        >>= applyAsTemplate mainCtx
+        >>= loadAndApplyTemplate "templates/default.html" mainCtx
+        >>= relativizeUrls
 
   match "pages/about.md" $ do
     routePagesToRoot
