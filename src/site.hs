@@ -10,14 +10,12 @@ import Hakyll
 import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
 
 --------------------------------------------------------------------------------
--- * Load snapshots on main page
 -- * Add html5 tags
 -- * Add rss/atom to footer of page
 -- * Read configuration data from yaml files
-
 -- * Move blog to S3 bucket
 -- * Generate sitemap page
--- * Setup eric.stolten.net
+-- * Setup eric@stolten.net email address
 -- * Setup google console for my domain
 -- * Get SSL certificate?
 -- * Add twitter style meta data tags to each page and add to plop
