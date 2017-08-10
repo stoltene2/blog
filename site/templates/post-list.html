@@ -1,14 +1,17 @@
-<ul>
-    $for(posts)$
-        <li>
-          <a href="$url$">$title$</a> - $date$
-          <p>
-            $if(teaser)$
-              $teaser$
-            $else$
-              $description$
-            $endif$
-          </p>
-        </li>
-    $endfor$
-</ul>
+$for(posts)$
+<article>
+  <header>
+    <h4>
+      <a href="$url$">$title$</a> - <time datetime="$isoDate$">$date$</time>
+    </h4>
+  </header>
+
+  <section>
+    $if(teaser)$
+    $teaser$
+    $else$
+    $description$
+    $endif$
+  </section>
+</article>
+$endfor$
