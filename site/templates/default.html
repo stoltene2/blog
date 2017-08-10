@@ -19,15 +19,15 @@
 
      ga('create', 'UA-46871709-2', 'auto');
      ga('send', 'pageview');
-
     </script>
 
-    <div id="body_wrap">
+    <nav>
       $partial("templates/navbar.html")$
-      <main class="container">
-        $body$
-      </main>
-    </div>
+    </nav>
+
+    <main id="body_wrap" class="container">
+      $body$
+    </main>
 
     <footer>
       $partial("templates/footer.html")$
