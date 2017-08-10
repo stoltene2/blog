@@ -1,3 +1,2 @@
 User-agent: *
 Disallow: /drafts/
-Sitemap: sitemap.xml

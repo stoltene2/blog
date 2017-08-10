@@ -10,18 +10,16 @@ import Hakyll
 import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
 
 --------------------------------------------------------------------------------
--- * Add html5 tags
 -- * Add rss/atom to footer of page
+-- * Generate sitemap page
+-- * Add bulma for styling, add hakyll-sass
+-- * Add twitter style meta data tags to each page and add to plop
 -- * Read configuration data from yaml files
 -- * Move blog to S3 bucket
--- * Generate sitemap page
 -- * Setup eric@stolten.net email address
 -- * Setup google console for my domain
 -- * Get SSL certificate?
--- * Add twitter style meta data tags to each page and add to plop
--- * Add bulma for styling, add hakyll-sass
 -- * Profile the page for inefficiencies
-
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration =  FeedConfiguration
