@@ -9,7 +9,7 @@
  *
  *   Templates are located in plop/templates.
  *
- *   posts/<date>-<post-title/
+ *   site/posts/<date>-<post-title/
  *   ├── images
  *   │   └── .gitignore
  *   ├── index.markdown
@@ -59,16 +59,16 @@ module.exports = function (plop) {
       return [
         {
           type: 'add',
-          path: 'posts/{{> postPath}}/index.markdown',
+          path: 'site/posts/{{> postPath}}/index.markdown',
           templateFile: 'plop/templates/index.markdown.tmpl'
         },
         {
           type: 'add',
-          path: 'posts/{{> postPath}}/images/.gitignore'
+          path: 'site/posts/{{> postPath}}/images/.gitignore'
         },
         {
           type: 'add',
-          path: 'posts/{{> postPath}}/partials/.gitignore'
+          path: 'site/posts/{{> postPath}}/partials/.gitignore'
         }
       ];
     }
