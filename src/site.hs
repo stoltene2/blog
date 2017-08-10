@@ -116,7 +116,10 @@ routePagesToRoot = route $
 
 
 postCtx :: Context String
-postCtx = metadataField <> dateField "date" "%B %e, %Y" <> defaultContext
+postCtx = metadataField
+  <> dateField "date" "%B %e, %Y"
+  <> dateField "isoDate" "%Y-%m-%d"
+  <> defaultContext
 
 
 --------------------------------------------------------------------------------

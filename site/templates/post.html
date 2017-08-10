@@ -1,17 +1,22 @@
-<div class="blog-entry">
-  <h1 class="blog-title">$title$</h1>
-  <div class="blog-info">
-    $date$
-    $if(author)$
-    by $author$
-    $endif$
-  </div>
+<article class="blog-entry">
+  <header>
+    <h1 class="blog-title">$title$</h1>
+  </header>
 
-  <div class="blog-body">
+  <section class="blog-info">
+    <time datetime="$isoDate$">$date$</time>
+    <section>
+      $if(author)$
+      $author$
+      $endif$
+    </section>
+  </section>
+
+  <section class="blog-body">
     $if(teaser)$
       $teaser$
     $else$
       $body$
     $endif$
-  </div>
-</div>
+  </section>
+</article>
