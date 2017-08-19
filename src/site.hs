@@ -26,7 +26,7 @@ feedConfiguration =  FeedConfiguration
     { feedTitle       = "Programming the smart way."
     , feedDescription = "I explore program design, large scale applications, and solid design especially with FP."
     , feedAuthorName  = "Eric Stolten"
-    , feedAuthorEmail = "eric@stolten.net"
+    , feedAuthorEmail = ""
     , feedRoot        = "http://eric.stolten.net"
     }
 
