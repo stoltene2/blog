@@ -14,10 +14,13 @@ packages:
       git: https://github.com/RaphaelJ/friday-devil.git
       commit: 73181586307a4db93302bfeb9af9ded615e60a07
     extra-dep: true
+  - location:
+      git: https://github.com/stoltene2/hakyll-sass.git
+      commit: 7f6f391f0acf8d15c0b632267d24cfb7e881565e
+    extra-dep: true
 
 extra-deps:
   - friday-0.2.3.1
-  - friday-devil-0.1.1.1
   - ratio-int-0.1.2
 
 extra-include-dirs:
@@ -26,4 +29,4 @@ extra-include-dirs:
 extra-lib-dirs:
   - /usr/local/Cellar/devil/1.7.8_3/lib
 
-resolver: lts-9.0
+resolver: lts-9.6

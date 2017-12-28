@@ -1,16 +1,28 @@
 
-# Dependencies
+# Build Docker image
 
-* DevIL
+```
+docker build --cpuset-cpus 0,1,2 -t stoltene2/blog .
+```
 
-On OSX, `brew install devil` on ubuntu, `apt-get install devil`.
+# Building the application
 
-On OSX, this requires having gcc installed. For some reason devil
-doesn't build on osx with clang.
+```
+> docker run -it --name blog -v $(pwd):/blog stoltene2/blog /bin/bash
+> stack build
+```
 
+# Deploy application
 
-## Building
+## Configure amazon cli
 
-Install all the dependencies
+```
+> aws config
+```
 
+## Deploy
+
+```
+> stack exec personal-blog build
+> stack exec personal-blog deploy
 ```
