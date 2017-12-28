@@ -15,7 +15,6 @@ import Image.Resize (resizeImageCompiler, PNG(..), JPG(..))
 -- * Add rss/atom to footer of page
 -- * Add bulma for styling, add hakyll-sass
 -- * Add twitter style meta data tags to each page and add to plop
--- * Move blog to S3 bucket
 -- * Get SSL certificate?
 -- * Profile the page for inefficiencies
 
