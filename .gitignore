@@ -16,3 +16,4 @@ _site
 /.DS_Store
 .stack-work/
 /node_modules/
+.DS_Store/
