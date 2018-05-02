@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "plop": "^1.8.0"
+    "plop": "^1.9.1"
   },
   "scripts": {
     "plop": "plop"
