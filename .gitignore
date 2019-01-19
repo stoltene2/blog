@@ -13,8 +13,6 @@ _site
 /cabal.sandbox.config
 /docset/
 /posts/.DS_Store
-/.DS_Store
 .stack-work/
 /node_modules/
-.DS_Store/
-/site/.DS_Store
+**/.DS_Store
