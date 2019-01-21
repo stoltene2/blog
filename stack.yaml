@@ -24,9 +24,9 @@ extra-deps:
   - ratio-int-0.1.2
 
 extra-include-dirs:
-  - /usr/local/Cellar/devil/1.7.8_3/include
+  - /usr/local/Cellar/devil/1.8.0_1/include
 
 extra-lib-dirs:
-  - /usr/local/Cellar/devil/1.7.8_3/lib
+  - /usr/local/Cellar/devil/1.8.0_1/lib
 
 resolver: lts-9.6

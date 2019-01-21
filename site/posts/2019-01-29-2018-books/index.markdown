@@ -46,7 +46,7 @@ the place.
 
 Brandon Sanderson books are tomes of delight. When I say tomes, I mean
 it. This book rounds up at around 1220 pages. The hardcover book built
-some serious are strength.
+some serious arm strength.
 
 They classify these books Epic Fantasy and this is Sanderson's best
 work yet. If you have not read anything by Brandon Sanderson you
