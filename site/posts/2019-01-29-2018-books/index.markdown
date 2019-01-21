@@ -237,7 +237,7 @@ Read this if you enjoy quick Sci-Fi reads without much science.
 
 **487 pages** · ⭐️⭐️⭐️⭐
 
-I happened to discover this book waiting in the Bilboa airport. The
+I happened to discover this book waiting in the Bilbao airport. The
 concept seemed interesting. I liked it but wouldn't read it again.
 
 Read this if you enjoy fiction, know anything about Barcelona, and
@@ -327,7 +327,7 @@ I enjoyed the first version of this book and I really liked the second
 version also. Anyone developing software systems should read this
 book.
 
-Read this book if you manager computer systems and failure is a big
+Read this book if you manage computer systems and failure is a big
 deal.
 
 ### Realm of Racket
@@ -353,7 +353,7 @@ language.
 
 If you've read more than 2 Dan Brown books then I wouldn't read
 this. Same formula but different cities. The only difference for me is
-that I've been to the Gugenheim in Bilboa and seen the Dali sights in
+that I've been to the Gugenheim in Bilbao and seen the Dali sights in
 Barcelona. That was pretty cool.
 
 Read this if you generally like reading Dan Brown books.
