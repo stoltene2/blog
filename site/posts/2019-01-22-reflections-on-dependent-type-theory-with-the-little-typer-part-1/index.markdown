@@ -53,9 +53,10 @@ Mathematically, the factorial function is determined by, $n! = 1*2*3*...*(n-1)*n
 This indicates the type needed for factorial. It takes a [natural
 number](https://en.wikipedia.org/wiki/Natural_number), `Nat`, and
 returns another `Nat`. The type solidifies that our function does
-nothing more than this. Because factorial only knows about consuming
-Nat and must return a Nat we have limited tools at our
-disposal. Namely, any function which operates on `Nat`s.
+nothing more than this. Because `factorial` only consumes a `Nat` and
+must return a `Nat` we have limited tools at our disposal. Namely, any
+function which operates on `Nat`s by iterating, reducing, addition,
+multiplication and using the properties of the given `Nat`.
 
 ~~~ {.lisp .html}
 (claim factorial
