@@ -66,5 +66,5 @@ executable personal-blog
                      , friday
                      , friday-devil
                      , hakyll
-                     , hakyll-sass
+                     , hakyll-sass >= 0.2.4
                      , unordered-containers
