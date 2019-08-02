@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/stoltene2/personal-blog.svg)](https://travis-ci.org/stoltene2/chatty-lambdapersonal-blog)
 
 # Build Docker image
 
