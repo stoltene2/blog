@@ -6,7 +6,7 @@ description: In Part 2, we will implement list replication
 ---
 
 [In
-continuation](../2019-01-22-reflections-on-dependent-type-theory-with-the-little-typer-part-1/index.html)
+continuation](../2019-01-27-reflections-on-dependent-type-theory-with-the-little-typer-part-1/index.html)
 with my exploration of The Little Typer I'm going to implement
 `replicate` on `List`s. The replicate function is [pretty standard in
 Haskell](https://www.stackage.org/haddock/lts-13.5/base-4.12.0.0/Prelude.html#v:replicate). Our
