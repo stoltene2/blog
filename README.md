@@ -1,36 +1,29 @@
 
-[![Build Status](https://travis-ci.org/stoltene2/personal-blog.svg)](https://travis-ci.org/stoltene2/chatty-lambdapersonal-blog)
+[![Build Status](https://travis-ci.org/stoltene2/personal-blog.svg)](https://travis-ci.org/stoltene2/personal-blog)
 
-# Create image for tagging
-
-```
-stack  --no-docker-set-user --docker-persist --docker-container-name=temp exec bash
-```
-
-# Build Docker image
+# Building the personal-blog application
 
 ```
-docker build --cpuset-cpus 0,1,2 -t stoltene2/blog .
+$ nix-build
+# or
+$ nix-shell
+$ nix-build
 ```
 
-# Building the application
+# Deploying the blog
+
+## Configure amazon cli credentials
 
 ```
-> docker run -it --name blog -v $(pwd):/blog stoltene2/blog /bin/bash
-> stack build
-```
-
-# Deploy application
-
-## Configure amazon cli
-
-```
-> aws config
+$ nix-shell
+$ aws configure
 ```
 
 ## Deploy
 
 ```
-> stack exec personal-blog build
-> stack exec personal-blog deploy
+$ nix-shell
+$ personal-blog build
+$ personal-blog check
+$ personal-blog deploy
 ```
