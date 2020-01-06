@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/stoltene2/personal-blog.svg)](https://travis-ci.org/stoltene2/personal-blog)
+[![Build Status](https://travis-ci.org/stoltene2/blog.svg)](https://travis-ci.org/stoltene2/blog)
 
 # Building the personal-blog application
 
