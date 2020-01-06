@@ -1,5 +1,5 @@
 { mkDerivation, aeson, base, binary, bytestring, containers
-, filepath, hakyll, hakyll-sass, stdenv
+, filepath, hakyll, stdenv
 , unordered-containers
 }:
 
@@ -7,6 +7,7 @@ let
   pkgs = import <nixpkgs> { };
   friday = pkgs.haskellPackages.callPackage nix/friday.nix {};
   friday-devil = pkgs.haskellPackages.callPackage nix/friday-devil.nix {};
+  hakyll-sass = pkgs.haskellPackages.callPackage nix/hakyll-sass.nix {};
 in
 mkDerivation {
   pname = "personal-blog";
