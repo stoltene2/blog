@@ -18,7 +18,7 @@ mkDerivation {
   executableHaskellDepends = [
     aeson base binary bytestring containers filepath friday
     friday-devil hakyll hakyll-sass unordered-containers
-    # There is a runtime dependency on this package
+    # There is a runtime dependency on these packages
     pkgs.pngquant
     pkgs.awscli
   ];

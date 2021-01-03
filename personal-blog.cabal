@@ -65,6 +65,6 @@ executable personal-blog
                      , filepath
                      , friday
                      , friday-devil
-                     , hakyll
+                     , hakyll >= 4.13.0.1
                      , hakyll-sass >= 0.2.4
                      , unordered-containers

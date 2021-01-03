@@ -7,8 +7,8 @@ mkDerivation {
   version = "0.2.3.1";
   src = fetchgit {
     url = "https://github.com/stoltene2/friday.git";
-    rev = "810ad3f87df93e8c883f5c4a2266df5aa8452826";
-    sha256 = "1v5x9jynm3h1zf501ff8rk8ah8gpc9p7n9j2pr3ral25y1y6hvyb";
+    rev = "df581739cb161dceb78189b9b3099467c3890350";
+    sha256 = "1m0lsip85s93ah5axpn0i1l6y667g3brg8xhvhsip0kcnl0a3j6r";
   };
   libraryHaskellDepends = [
     base containers convertible deepseq primitive ratio-int
